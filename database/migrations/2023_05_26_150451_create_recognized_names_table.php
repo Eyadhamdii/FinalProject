@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('recognized_names', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamps();
+            $table->time('time'); // Add the 'time' column
+            $table->string('day'); // Add the 'day' column            $table->timestamps();
         });
     }
 

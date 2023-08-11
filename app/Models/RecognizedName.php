@@ -10,7 +10,19 @@ class RecognizedName extends Model
     use HasFactory;
     protected $table = 'recognized_names'; // Specify the table name if different from the default
     
-    protected $fillable = [
-        'name', // Define the columns that can be mass assigned
-    ];
+    protected $fillable = ['name',
+'day','time',
+];
+public function registeredCourses()
+{
+    return $this->hasMany(RegisteredCourse::class, 'name', 'name');
+}
+
+
+    public function timetable()
+{
+    return $this->hasOne(Timetable::class);
+}
+
+    
 }

@@ -6,6 +6,8 @@
     <title>Recognized Names</title>
 </head>
 <body>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
     <h1>Recognized Names:</h1>
     <ul>
         @foreach ($names as $name)

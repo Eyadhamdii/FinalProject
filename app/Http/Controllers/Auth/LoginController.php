@@ -7,8 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Http\Controllers\Auth\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 
 class LoginController extends Controller
@@ -26,7 +26,15 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->intended($this->redirectPath());
+    }
+  /**
      * Where to redirect users after login.
      *
      * @var string
@@ -65,4 +73,5 @@ class LoginController extends Controller
 //         return redirect()->route('home');
 //     }
 // }
+
 }

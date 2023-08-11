@@ -1,3 +1,6 @@
+<?php
+use Illuminate\Support\Facades\Storage;
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -214,7 +217,7 @@ margin-top:80px;
   </head>
   
   <body>
-    <style>
+    <style class="">
       /* Google Font Link */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 *{
@@ -522,17 +525,18 @@ background: #2370ED 50%;
 			background-color: #f2f2f2
 		}
 
-  .circle {
+    .circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: url('{{ Storage::url($user->photo) }}');
+  background-size: cover; /* Adjusts the size of the background image */
+  background-position: center; /* Centers the background image */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
 
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      background-image: url('https://www.w3schools.com/w3images/avatar2.png');
-      background-size: cover;
-      margin-left:auto; 
-      margin-right:auto;
-      margin-top:10px;
-  }
  .ttt{
   margin-top:40px;
  }

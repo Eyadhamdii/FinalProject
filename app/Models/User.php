@@ -26,12 +26,35 @@ class User extends Authenticatable
         'Mobile',
         'gender',
         'role',
+        'photo',
     ];
+
+    public function isPresent($recognizedNames, $currentDay)
+    {
+        return $this->registeredCourses()
+            ->whereHas('course.timetable', function ($query) use ($currentDay) {
+                $query->where('day', $currentDay);
+            })
+            ->whereIn('name', $recognizedNames)
+            ->exists();
+    }
+    public function forms()
+    {
+        return $this->hasMany(Form::class, 'user_id', 'UniId');
+    }
     public function registeredCourses()
     {
         return $this->hasMany(RegisteredCourse::class);
     }
-
+    public function timetable()
+    {
+        return $this->hasOne(Timetable::class);
+    }
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+    
     /**
      * The attributes that should be hidden for serialization.
      *

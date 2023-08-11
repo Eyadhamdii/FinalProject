@@ -14,7 +14,34 @@ class ProfileController extends Controller
 public function index()
 {
     $user = Auth::user();
+    $photoUrl = $user->photo;
 
-    return view('profile.index', compact('user'));  
+    // Check if the photo URL exists
+    if ($photoUrl) {
+        // Display the photo using an <img> tag
+        return view('profile.index', compact('user', 'photoUrl'));
+    } else {
+        return view('profile.index', compact('user'));
+    }
+}
+
+public function contact()
+{
+    $user = Auth::user();
+
+    return view('contact.contact');  
+}
+public function addcourse()
+{
+    $user = Auth::user();
+
+    return view('admin.addcourse');  
+}
+
+public function complain()
+{
+    $user = Auth::user();
+
+    return view('admin.complain',['name' => $user->name ,'role' => $user->role]);  
 }
 }

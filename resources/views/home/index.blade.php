@@ -554,7 +554,7 @@ body{
           <span class="tooltip">About us</span>
         </li>
         <li>
-          <a href="">
+          <a href="contact">
           <i class="fa-solid fa-address-book"></i>
                 <span class="links_name">Contact us</span>
           </a>

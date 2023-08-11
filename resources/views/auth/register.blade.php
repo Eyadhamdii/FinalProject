@@ -548,7 +548,7 @@ margin-top:20px;
 
     <div class="flexform">
   <div class="FormLogin">
-    <form class="froms" method="POST" action="{{ route('register') }}">
+  <form class="froms" method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
       @csrf
       <h3>Sign up</h3>
       <div class="row mb-3">
@@ -618,6 +618,8 @@ margin-top:20px;
   			<label class="mm" for="Doctor">Doctor</label><br>
   		 <div class="rr"><input type="radio" name="role" value="Student"></div>
   		<label class="mm"  for="Student">Student</label><br></div></div>
+    <label for="photo">Upload Photo:</label>
+    <input type="file" id="photo" name="photo">
 
 
       <div class="row mb-0">

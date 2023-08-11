@@ -1,33 +1,79 @@
 import face_recognition
 import cv2
 import numpy as np
+import requests
+import mysql.connector
+from datetime import datetime
+
+# Connect to the MySQL database
+connection = mysql.connector.connect(
+    host='localhost',
+    port='3306',
+    user='root',
+    password='',
+    database='laravel6'
+)
+
+cursor = connection.cursor()
+
+# Load known face encodings and names from the database
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
 
 # Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file("./scripts/Eyad.JPG")
+obama_image = face_recognition.load_image_file("./Eyad.JPG")
 obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
 
-# Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file("./scripts/biden.jpg")
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+# Load a sample picture and learn how to recognize it.
+noha_image = face_recognition.load_image_file("./nohaadel.jpeg")
+noha_face_encoding = face_recognition.face_encodings(noha_image)[0]
+
+
+noha2_image = face_recognition.load_image_file("./nohaayman.jpeg")
+noha2_face_encoding = face_recognition.face_encodings(noha2_image)[0]
+
+engy_image = face_recognition.load_image_file("./engy.jpeg")
+engy_face_encoding = face_recognition.face_encodings(engy_image)[0]
+
+nourhan_image = face_recognition.load_image_file("./nourhan.jpeg")
+nourhan_face_encoding = face_recognition.face_encodings(nourhan_image)[0]
+
+
+MohamedSaber_image = face_recognition.load_image_file("./MohamedSaber.jpeg")
+MohamedSaber_face_encoding = face_recognition.face_encodings(MohamedSaber_image)[0]
+
+Ammar_image = face_recognition.load_image_file("./Ammar.jpeg")
+Ammar_face_encoding = face_recognition.face_encodings(Ammar_image)[0]
+
 
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     obama_face_encoding,
-    biden_face_encoding
+    noha_face_encoding,
+    noha2_face_encoding,
+    engy_face_encoding,
+    nourhan_face_encoding,
+    MohamedSaber_face_encoding,
+    Ammar_face_encoding,
+
+
 ]
 known_face_names = [
     "Eyad",
-    "Joe Biden"
+    "Noha Adel",
+    "Noha ayman",
+    "Engy Ahmed",
+    "Nourhan Hossam",
+    "MohamedSaber",
+    "Ammar"
 ]
 
 # Initialize some variables
 face_locations = []
 face_encodings = []
 face_names = []
-process_this_frame = True
+prev_name = None  # Store previously recognized name
 
 while True:
     # Grab a single frame of video
@@ -54,7 +100,15 @@ while True:
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
             name = known_face_names[best_match_index]
-            print(name)
+            if name != prev_name:
+                print(name)
+                prev_name = name
+                # Get the current time and day
+                current_time = datetime.now().strftime("%H:%M:%S")
+                current_day = datetime.now().strftime("%A")
+                # Insert recognized name into the database
+                cursor.execute('INSERT INTO recognized_names (name, day, time) VALUES (%s, %s, %s)', (name, current_day, current_time))
+                connection.commit()
 
         face_names.append(name)
 
@@ -71,14 +125,13 @@ while True:
 
         # Draw a label with a name below the face
         cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+
         font = cv2.FONT_HERSHEY_DUPLEX
         cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
-   
-
 
     # Display the resulting image
-    # cv2.imshow('Video', frame)
+    cv2.imshow('Video', frame)
 
     # Hit 'q' on the keyboard to quit!
     if cv2.waitKey(1) & 0xFF == ord('q'):

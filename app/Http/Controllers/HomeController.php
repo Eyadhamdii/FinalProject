@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    
     protected $redirectTo;
 
     /**
@@ -36,4 +37,18 @@ class HomeController extends Controller
             return view('home.index', ['name' => $user->name ,'role' => $user->role]);  
         }
     }
+    protected function adminDashboard()
+    {
+        $user = Auth::user();
+        $role = $user->role;
+
+        if ($user->role === 'admin') {
+            return view('admin.dashboard',['name' => $user->name ,'role' => $user->role]);
+        }
+    
+        return redirect()->intended($this->redirectPath());
+    }
+    
+
+    
 }
